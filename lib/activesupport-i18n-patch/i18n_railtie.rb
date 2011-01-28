@@ -5,10 +5,10 @@ require "active_support/core_ext/array/wrap"
 
 module I18n
   class Railtie < Rails::Railtie
-    # Set the i18n configuration after configuration 
+    # Set the i18n configuration before any eager loading
     # to ensure the I18n.load_path is inited before any
     # classes/models are loaded
-    config.after_configuration do |app|
+    config.before_eager_load do |app|
       fallbacks = app.config.i18n.delete(:fallbacks)
 
       app.config.i18n.each do |setting, value|

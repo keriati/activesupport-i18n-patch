@@ -9,8 +9,14 @@ Gem::Specification.new do |s|
   s.authors     = ["Saimon Moore"]
   s.email       = ["saimonmoore@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{Monkey patch rails to trigger I18n setup via an after configuration hook}
-  s.description = %q{Monkey patch rails to trigger I18n setup via an after configuration hook}
+  s.summary     = %q{Monkey patch rails to trigger I18n setup before any eager loading}
+  s.description = %q{Currently rails will load all model classes if config.cache_classes is set to true.
+    It does so by calling eager_load hooks. At this point, the I18n railtie after_initialize hook 
+    (which sets up the i18n load path) hasn't been run which means that, any translations done at the class
+    level of a record are missing. (This was causing failing cukes in our case)
+
+    The fix is to move the I18n.load_path setup to before any eager loading is done
+  }
 
   s.rubyforge_project = "activesupport-i18n-patch"
 
